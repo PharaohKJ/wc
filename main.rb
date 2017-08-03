@@ -1,4 +1,7 @@
 require 'twelite_serial_data'
+require 'rubygems'
+gem 'serialport','>=1.0.4'
+require 'serialport'
 
 sp = SerialPort.new('/dev/ttyUSB0', 115200, 8, 1, 0) # 115200, 8bit, stopbit 1, parity none
 loop do
