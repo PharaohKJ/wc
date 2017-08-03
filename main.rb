@@ -1,4 +1,4 @@
-require 'twelite_serial_data'
+require './twelite_serial_data'
 require 'rubygems'
 gem 'serialport','>=1.0.4'
 require 'serialport'
