@@ -1,5 +1,6 @@
 # coding: utf-8
 class TweliteSerialData
+  attr_reader :original
   def initialize(v = nil)
     return if v.nil?
     @original = v
