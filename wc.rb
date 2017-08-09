@@ -13,8 +13,8 @@ class Wc
       callback_value =  1 if my_class.in?(current)  && my_class.out?(before)
       callback_value = -1 if my_class.out?(current) && my_class.in?(before)
       yield(callback_value, current[:analog_in1])
+      @history.slice!(0..-3)
     end
-    @history.slice!(-2, 2)
   end
 
   def in?
