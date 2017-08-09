@@ -9,8 +9,10 @@ class Wc
       current = @history[-1]
       before = @history[-2]
       my_class = self.class
-      yield(true)  if my_class.in?(current)  && my_class.out?(before)
-      yield(false) if my_class.out?(current) && my_class.in?(before)
+      callback_value =  0
+      callback_value =  1 if my_class.in?(current)  && my_class.out?(before)
+      callback_value = -1 if my_class.out?(current) && my_class.in?(before)
+      yield(callback_value)
     end
     @history.slice!(-2, 2)
   end
