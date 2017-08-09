@@ -13,8 +13,8 @@ loop do
   begin
     line = sp.gets # read
     data = TweliteSerialData.new(line.strip)
-    wc.add(data) do |x|
-      puts x
+    wc.add(data) do |x, v|
+      puts x, v
     end
     # log.info data[:analog_in1]
     # log.info data.original
