@@ -5,6 +5,7 @@ gem 'serialport','>=1.0.4'
 require 'serialport'
 require 'logger'
 require 'mqtt'
+require 'json'
 
 log = Logger.new('/tmp/wc_log.txt')
 
@@ -18,6 +19,7 @@ sp = SerialPort.new('/dev/ttyUSB0', 115_200, 8, 1, 0) # 115200, 8bit, stopbit 1,
                                ca_file: 'rootCA.pem')
 
 wc = Wc.new
+
 loop do
   begin
     line = sp.gets # read
@@ -28,7 +30,18 @@ loop do
         1 => 'IN',
         -1 => 'OUT'
       }
-      @client.publish('wc/status', value_map[x]) unless value_map[x].nil?
+      next if value_map[x].nil?
+      status = {
+        state: {
+          reported: {
+            status: value_map[x]
+          }
+        }
+      }
+      @client.publish(
+        '$aws/things/wc-sensor/shadow/update',
+        status.to_json
+      )
     end
     log.info data[:analog_in1]
     log.info data.original

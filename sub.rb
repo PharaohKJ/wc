@@ -1,14 +1,14 @@
 # coding: utf-8
-require "mqtt"
+require 'mqtt'
 
-MQTT::Client.connect(host: "a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com",
+MQTT::Client.connect(host: 'a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com',
                      port: 8883,
                      ssl: true,
-                     cert_file: "cert.pem",
-                     key_file: "private-key.pem",
-                     ca_file: "rootCA.pem") do |client|
+                     cert_file: 'cert.pem',
+                     key_file: 'private-key.pem',
+                     ca_file: 'rootCA.pem') do |client|
 
-  client.subscribe("wc/status")
+  client.subscribe('$aws/things/thingName/shadow/update/documents')
   begin
     topic,message = client.get #ここでブロックする
     p [topic, message, Time.now]
