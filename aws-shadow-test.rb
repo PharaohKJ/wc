@@ -15,11 +15,12 @@ log = Logger.new('/tmp/wc_log.txt')
 
 test_hash = {
   state: {
+    desired: nil,
     reported: {
-      status: "in"
+      status: "OUT"
     }
   },
-  versiosn: 3
+  versiosn: 7
 }
 
 # reported : thing からレポートするものが指定

@@ -8,7 +8,7 @@ MQTT::Client.connect(host: 'a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com',
                      key_file: 'private-key.pem',
                      ca_file: 'rootCA.pem') do |client|
 
-  client.subscribe('$aws/things/thingName/shadow/update/documents')
+  client.subscribe('$aws/things/wc-sensor/shadow/update/documents')
   begin
     topic,message = client.get #ここでブロックする
     p [topic, message, Time.now]
