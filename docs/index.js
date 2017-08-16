@@ -18,9 +18,13 @@ window.onload = function(){
             t.style.display = 'inherit';
             document.getElementById("loading").style.display = 'none';
             document.body.style.backgroundColor = statusWithColor[status];
-            document.getElementById("updated_at").textContent = "最終更新 : " + new Date(json.timestamp * 1000);
+            document.getElementById("updated_at").textContent =
+                "最終トイレ状態更新 : " +
+                new Date(json.metadata.reported.status.timestamp * 1000) +
+                ", このページ更新時 : " +
+                new Date(json.timestamp * 1000);
         }
     }).catch(function (response) {
         console.log(response); // => "TypeError: ~"
     });
-}
+};
