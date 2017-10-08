@@ -11,12 +11,20 @@ log = Logger.new('/tmp/wc_log.txt')
 
 sp = SerialPort.new('/dev/ttyUSB0', 115_200, 8, 1, 0) # 115200, 8bit, stopbit 1, parity none
 
+10.times.each do |t|
+begin
 @client = MQTT::Client.connect(host: 'a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com',
                                port: 8883,
                                ssl: true,
                                cert_file: 'cert.pem',
                                key_file: 'private-key.pem',
                                ca_file: 'rootCA.pem')
+break unless @client.nil?
+rescue => e
+  log.fatal e.to_s
+  sleep 1
+end
+end
 
 wc = Wc.new
 
