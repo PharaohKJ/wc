@@ -1,29 +1,52 @@
 require './twelite_serial_data'
 require './wc'
 require 'rubygems'
-gem 'serialport','>=1.0.4'
+gem 'serialport', '>=1.0.4'
 require 'serialport'
 require 'logger'
 require 'mqtt'
 require 'json'
 
-log = Logger.new('/tmp/wc_log.txt')
+log = Logger.new(ARGV[0] || '/tmp/wc_log.txt')
 
-sp = SerialPort.new('/dev/ttyUSB0', 115_200, 8, 1, 0) # 115200, 8bit, stopbit 1, parity none
+# 115200, 8bit, stopbit 1, parity none
+sp = SerialPort.new(
+  ARGV[1] || '/dev/ttyUSB0',
+  115_200,
+  8,
+  1,
+  0
+)
 
-10.times.each do |t|
-begin
-@client = MQTT::Client.connect(host: 'a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com',
-                               port: 8883,
-                               ssl: true,
-                               cert_file: 'cert.pem',
-                               key_file: 'private-key.pem',
-                               ca_file: 'rootCA.pem')
-break unless @client.nil?
-rescue => e
-  log.fatal e.to_s
-  sleep 1
+MQTT_PARAM = {
+  host: 'a1f18lql3l5z0z.iot.ap-northeast-1.amazonaws.com',
+  port: 8883,
+  ssl: true,
+  cert_file: 'cert.pem',
+  key_file: 'private-key.pem',
+  ca_file: 'rootCA.pem'
+}.freeze
+
+def mqtt_client_open
+  10.times.each do |t|
+    begin
+      client = MQTT::Client.connect(MQTT_PARAM)
+      yield(client)
+      client.disconnect
+    rescue => e
+      log.fatal "MQTT Connect try count = #{t} : #{e}"
+      sleep 1
+    end
+  end
 end
+
+def publish(status)
+  mqtt_client_open do |client|
+    client.publish(
+      '$aws/things/wc-sensor/shadow/update',
+      status.to_json
+    )
+  end
 end
 
 wc = Wc.new
@@ -46,10 +69,7 @@ loop do
           }
         }
       }
-      @client.publish(
-        '$aws/things/wc-sensor/shadow/update',
-        status.to_json
-      )
+      publish(status)
     end
     log.info data[:analog_in1]
     log.info data.original
