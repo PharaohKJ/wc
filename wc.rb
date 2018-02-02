@@ -5,16 +5,15 @@ class Wc
 
   def add(r)
     @history << r
-    if @history.size >= 2
-      current = @history[-1]
-      before = @history[-2]
-      my_class = self.class
-      callback_value =  0
-      callback_value =  1 if my_class.in?(current)  && my_class.out?(before)
-      callback_value = -1 if my_class.out?(current) && my_class.in?(before)
-      yield(callback_value, current[:analog_in1])
-      @history.slice!(0..-3)
-    end
+    return if @history.size < 2
+    current = @history[-1]
+    before = @history[-2]
+    my_class = self.class
+    callback_value =  0
+    callback_value =  1 if my_class.in?(current)  && my_class.out?(before)
+    callback_value = -1 if my_class.out?(current) && my_class.in?(before)
+    yield(callback_value, current[:analog_in1])
+    @history.slice!(0..-3)
   end
 
   def in?

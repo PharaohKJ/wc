@@ -56,7 +56,7 @@ loop do
     line = sp.gets # read
     data = TweliteSerialData.new(line.strip)
     wc.add(data) do |x, v|
-      log.info "event value = #{x}, value = #{v}"
+      log.info "event status = #{x}, value = #{v}"
       value_map = {
         1 => 'IN',
         -1 => 'OUT'
@@ -70,6 +70,7 @@ loop do
         }
       }
       publish(status)
+      log.info "MQTT published status = #{status}"
     end
     log.info data[:analog_in1]
     log.info data.original
