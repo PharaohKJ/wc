@@ -72,8 +72,10 @@ loop do
       publish(status)
       log.info "MQTT published status = #{status}"
     end
-    log.info data[:analog_in1]
     log.info data.original
+    [:analog_in1, :voltage, :quality].each do |x|
+      log.info "#{x} -> #{data[x]}"
+    end
   rescue => e
     log.fatal e.to_s
   end
