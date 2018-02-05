@@ -30,7 +30,7 @@ class Wc
 
   def self.in?(r)
     v = r[:analog_in1]
-    v > 300 && v <= 1500
+    v != -1 && v > 300 && v <= 1500
   end
 
   def self.out?(r)
