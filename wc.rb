@@ -30,10 +30,18 @@ class Wc
 
   def self.in?(r)
     v = r[:analog_in1]
-    v != -1 && v > 300 && v <= 1500
+    v != -1 && v > min && v <= max
   end
 
   def self.out?(r)
     !in?(r)
+  end
+
+  def self.min
+    (ENV.fetch('WC_MIN') { 400 }).to_i
+  end
+
+  def self.max
+    (ENV.fetch('WC_MAX') { 600 }).to_i
   end
 end

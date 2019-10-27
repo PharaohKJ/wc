@@ -1,22 +1,25 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
+                initial-scale=1.0,user-scalable=yes" />
     <title>PhalanXware Watercloset Status</title>
   </head>
   <body>
-    <div id="IN" style="display:none">
+    <div id="IN" style="display:none;text-align:center;">
       <h1>トイレあいてません！</h1>
-      <img src="in.png">
+      <img src="in.png" style="width:100%">
+
     </div>
-    <div id="OUT" style="display:none">
+    <div id="OUT" style="display:none;text-align:center;">
       <h1>トイレあいてます！</h1>
-      <img src="out.png">
+      <img src="out.png" style="width:100%">
     </div>
     <div id="loading">
       <h1>APIアクセス中</h1>
     </div>
     </div>
-    <div id="updated_at">
+    <div id="updated_at" style="text-align:center;">
     </div>
     <script src="index.js"></script>
   </body>

@@ -33,17 +33,18 @@ class TweliteSerialData
     }
     {
       # key: v(bitmask)
-      analog_in1: 0b00000011,
-      analog_in2: 0b00001100,
-      analog_in3: 0b00110000,
-      analog_in4: 0b11000000
-    }.each do |k, mask|
+      analog_in1: [0b00000011, 8 * 0],
+      analog_in2: [0b00001100, 8 * 2],
+      analog_in3: [0b00110000, 8 * 4],
+      analog_in4: [0b11000000, 8 * 6]
+    }.each do |k, (mask, offset)|
       if parsed[k] == 'FF'
         parsed[k] = -1
       elsif parsed[k] == '00'
         parsed[k] = 0
       else
-        parsed[k] = (parsed[k].hex * 4 + (parsed[:analog_corrector].hex & mask)) * 4
+        offset_value = (parsed[:analog_corrector].hex & mask) >> offset
+        parsed[k] = (parsed[k].hex * 4 + offset_value) * 4
       end
     end
     parsed
